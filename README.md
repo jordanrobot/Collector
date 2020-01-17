@@ -1,5 +1,8 @@
 # iLogic Collector
 
+
+![Logo](Images/iLogicCollector128.png)
+
 An Inventor iLogic tool that compiles multiple Visual Basic files into a single file.
 This file can be run from inside Inventor's iLogic environment.  This is most useful
 when you want to code in an external IDE such as Visual Studio, or when working on an
