@@ -3,13 +3,15 @@
 
 ![Logo](Images/iLogicCollector128.png)
 
-An Inventor iLogic tool that compiles multiple Visual Basic files into a single file.
-This file can be run from inside Inventor's iLogic environment.  This is most useful
-when you want to code in an external IDE such as Visual Studio, or when working on an
-add-in that you want to perform quick testing on during development. The script will
-collect any source code files within a single directory that contains the proper tag
-in the first line and insert them into a single iLogic file.  This is most often used
-when coding Inventor iLogic routines in Visual Studio.
+A powershell script that compiles multiple Visual Basic files into a single file for
+use in Autodesk's Inventor iLogic scripting environment. It is intended to allow use
+of external IDEs such as Visual Studio and support class or module-per-file coding
+organization.
+
+It is also useful when developing an Inventor Add-In and you want to perform testing
+in the iLogic environment.  The script will collect any source code files within a
+single directory that contains the proper tag in the first line and insert them into
+a single iLogic file.
 
 ## Use
 
