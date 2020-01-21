@@ -11,7 +11,7 @@ namespace iLogicCollector.CLI.Core
             Console.WriteLine("Hello World!");
 
             //get parameters
-            //-path (optional, or use cwd), -file (optional, file name to use)
+            //-path (optional, or use cwd), -file (optional, file name to use), -config (optional, configuration tag to recognize)
 
             String directory = "stuff"; //set directory based on parameter match
             String filename = "stuff"; //set filename
@@ -29,7 +29,7 @@ namespace iLogicCollector.CLI.Core
                 //add to the buff if found.
                 if (Regex.IsMatch(i, "(?i)</iLogicCollectorHeader>"))
                 {
-                    ''
+                    //do something
                 }
             }
         }
