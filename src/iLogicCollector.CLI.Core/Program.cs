@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace iLogicCollector.CLI.Core
@@ -12,6 +14,15 @@ namespace iLogicCollector.CLI.Core
 
             //get parameters
             //-path (optional, or use cwd), -file (optional, file name to use), -config (optional, configuration tag to recognize)
+
+
+            if (args == null)
+            {
+                Console.WriteLine("args is null");
+            }
+
+
+            ArgumentParser parser = new ArgumentParser(args);
 
             String directory = "stuff"; //set directory based on parameter match
             String filename = "stuff"; //set filename
@@ -33,5 +44,44 @@ namespace iLogicCollector.CLI.Core
                 }
             }
         }
+
+    }
+
+    public class ArgumentParser
+    {
+        public Dictionary<string, string> ParameterList { get; set; } = new Dictionary<string, string>(;
+
+        public void ArgumentParser(string[] keys]) 
+        {
+            foreach (string i in keys)
+            {
+                ParameterList.add(i, "");
+            }
+        }
+        public void Parse(string[] args)
+        {
+            while (args.Any())
+            {
+                if (ParameterList.ContainsKey(args[0]) && !ParameterList.ContainsKey(args[1]))
+                {
+                    ParameterList[args[0]] = args[1];
+                    args = args.Skip(2).ToArray();
+                }
+                else
+                {
+                    InvalidDataException err;
+                    throw new System.ArgumentException("Input arguments were not recognized.");
+                }
+            }
+        }
+}
+
+    public class ConfigurationPojo
+    {
+        public string CollectPath;
+        public string File;
+        public string FilePath;
+        public string Target;
+
     }
 }
