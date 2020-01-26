@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "iLogicCollector.CLI.Core": {
+      "commandName": "Project",
+      "commandLineArgs": "-o \"Testing output\" --force --path \"testing the path\""
+    }
+  }
+}
