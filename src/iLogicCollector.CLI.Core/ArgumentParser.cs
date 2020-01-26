@@ -1,5 +1,5 @@
 /*
-* Arguments class: application arguments interpreter
+* ArgumentParser class: application arguments interpreter
 *
 * Authors:		R. LOPES
 * Contributors:	R. LOPES
@@ -10,21 +10,19 @@
 * Version:		1.0
 */
 
-using System;
-using System.Collections;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 
-namespace iLogicCollector.Utility{
+namespace iLogicCollector{
 	/// <summary>
-	/// Arguments class
+	/// ArgumentParser class
 	/// </summary>
-	public class Arguments{
+	public class ArgumentParser{
 		// Variables
 		private  StringDictionary Parameters;
 
 		// Constructor
-		public Arguments(string[] args)
+		public ArgumentParser(string[] args)
         {
 
             Parameters = new StringDictionary();
@@ -90,7 +88,7 @@ namespace iLogicCollector.Utility{
             {
 				if(!Parameters.ContainsKey(parameter.ToLower())) Parameters.Add(parameter.ToLower(), "true");
             }
-        } //Arguments
+        } //ArgumentParser
 
 		// Retrieve a parameter value if it exists
 		public string this [string param] => (Parameters[param]);

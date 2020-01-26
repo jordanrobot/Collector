@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using iLogicCollector.Utility;
 
 namespace iLogicCollector
 {
@@ -14,7 +13,7 @@ namespace iLogicCollector
         public Configuration(string[] args)
         {
             // Command line parsing
-            var parameters = new Arguments(args);
+            var parameters = new ArgumentParser(args);
 
             //get parameters
             //-path (optional, or use cwd), -output (optional, file name to use), -config (optional, configuration tag to recognize), -force/-f (optional, forces the overwrite of the target file.)
