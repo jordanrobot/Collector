@@ -23,10 +23,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\Images\iLogicCollector.ico">
+    <EmbeddedResource Include="..\..\Images\iLogicCollector.ico">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
-    </None>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
