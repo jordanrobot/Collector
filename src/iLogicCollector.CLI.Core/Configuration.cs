@@ -33,9 +33,17 @@ namespace iLogicCollector
                 Output = temp + ".iLogicVb";
             }
 
-            if ((parameters["help"] != null) || (parameters["h"] != null))
+            //show the help menu;
+            if ((parameters["help"] != null) || (parameters["h"] != null) || (parameters["?"] != null))
             {
-                //show the help menu;
+                Console.WriteLine("iLogic Collector\n" +
+                                  "version: \n" +
+                                  "\n" +
+                                  "Command options:\n" +
+                                  "-p, --path:   Directory whose content you want to process.\n" +
+                                  "-o, --output: The output file to write.\n" +
+                                  "-f, --force:  Overwrite the output file if it already exists.\n" +
+                                  "-h, --help:   Show this help menu.\n");
             }
 
             if ((parameters["f"] != null) || (parameters["force"] != null))
