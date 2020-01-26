@@ -12,9 +12,12 @@ namespace iLogicCollector
         {
             Console.WriteLine("Hello World!");
 
- 
-             var config = new Configuration(args);
+            var config = new Configuration(args);
+             
 
+
+
+             Console.Write("\n\n Tests:\n");
              Console.WriteLine("Path = " + config.CollectPath);
              Console.WriteLine("Output = " + config.Output);
              Console.WriteLine("Force = " + config.Force);

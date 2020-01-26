@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 
 namespace iLogicCollector
 {
@@ -9,6 +10,7 @@ namespace iLogicCollector
         public string Output; //user entered output (file/path) name to save the collected file to
         public string FilePath; //formatted and corrected output filename
         public bool Force = false;
+        public static string Version = Assembly.GetEntryAssembly().GetName().Version.ToString();
 
         public Configuration(string[] args)
         {
@@ -37,7 +39,7 @@ namespace iLogicCollector
             if ((parameters["help"] != null) || (parameters["h"] != null) || (parameters["?"] != null))
             {
                 Console.WriteLine("iLogic Collector\n" +
-                                  "version: \n" +
+                                  "version: \n" + Version +
                                   "\n" +
                                   "Command options:\n" +
                                   "-p, --path:   Directory whose content you want to process.\n" +
