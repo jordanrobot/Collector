@@ -4,15 +4,17 @@ using System.Reflection;
 
 namespace iLogicCollector
 {
-    public class Configuration
+    public class Config
     {
-        public string CollectPath;
-        public string Output; //user entered output (file/path) name to save the collected file to
-        public string FilePath; //formatted and corrected output filename
-        public bool Force = false;
-        public static string Version = Assembly.GetEntryAssembly().GetName().Version.ToString();
+        public string CollectPath { get; set; }
+        public string Output { get; set; } //user entered output (file/path) name to save the collected file to
+        public string FilePath { get; set; } //formatted and corrected output filename
+        public bool Force { get; set; } = false;
+        public bool Debug { get; set; } = false;
+        public static string Version { get; }= Assembly.GetEntryAssembly().GetName().Version.ToString();
 
-        public Configuration(string[] args)
+
+        public Config(string[] args)
         {
             // Command line parsing
             var parameters = new ArgumentParser(args);
@@ -21,11 +23,13 @@ namespace iLogicCollector
             //-path (optional, or use cwd), -output (optional, file name to use), -config (optional, configuration tag to recognize), -force/-f (optional, forces the overwrite of the target file.)
 
             // Look for specific arguments values and display them if they exist (return null if they don't)
+            //Path
             if ((parameters["path"] != null) || (parameters["p"] != null))
             { CollectPath = parameters["path"]; }
             else
             { CollectPath = Environment.CurrentDirectory; }
 
+            //Output
             if ((parameters["output"] != null) || (parameters["o"] != null))
             { Output = parameters["output"]; }
             else
@@ -35,7 +39,7 @@ namespace iLogicCollector
                 Output = temp + ".iLogicVb";
             }
 
-            //show the help menu;
+            //Help;
             if ((parameters["help"] != null) || (parameters["h"] != null) || (parameters["?"] != null))
             {
                 Console.WriteLine("iLogic Collector\n" +
@@ -48,10 +52,19 @@ namespace iLogicCollector
                                   "-h, --help:   Show this help menu.\n");
             }
 
+            //Force
             if ((parameters["f"] != null) || (parameters["force"] != null))
             {
                 Force = true;
             }
+
+            //Debug
+            if ((parameters["d"] != null) || (parameters["debug"] != null))
+            {
+                Debug = true;
+            }
+
+
             //Todo: set the rest of these config options
 
 

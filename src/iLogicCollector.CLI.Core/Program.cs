@@ -10,17 +10,15 @@ namespace iLogicCollector
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var config = new Config(args);
 
-            var config = new Configuration(args);
-             
-
-
-
-             Console.Write("\n\n Tests:\n");
-             Console.WriteLine("Path = " + config.CollectPath);
-             Console.WriteLine("Output = " + config.Output);
-             Console.WriteLine("Force = " + config.Force);
+            if (config.Debug == true)
+            {
+                Console.Write("\n\n Tests:\n");
+                Console.WriteLine("Path = " + config.CollectPath);
+                Console.WriteLine("Output = " + config.Output);
+                Console.WriteLine("Force = " + config.Force);
+            }
 
         }
 
