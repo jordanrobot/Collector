@@ -10,7 +10,10 @@
 * Version:		1.0
 */
 
+using System;
 using System.Collections.Specialized;
+using System.Diagnostics;
+using System.Runtime.Serialization.Formatters;
 using System.Text.RegularExpressions;
 
 namespace iLogicCollector{
@@ -24,16 +27,23 @@ namespace iLogicCollector{
 		// Constructor
 		public ArgumentParser(string[] args)
         {
+            if (args[0] == null)
+            {
+                return;
+            }
+
 
             Parameters = new StringDictionary();
 			var splitter = new Regex (@"^-{1,2}|^/|=|:",RegexOptions.IgnoreCase|RegexOptions.Compiled);
+			//removes extraneous " quotes left behind in case the users use a \ character (which would escape the quote and leave it in the string"
 			var remover= new Regex(@"^['""]?(.*?)['""]?$",RegexOptions.IgnoreCase|RegexOptions.Compiled);
 			string parameter = null;
 
             // Valid parameters forms:
 			// {-,/,--}param{ ,=,:}((",')value(",'))
 			// Examples: -param1 value1 --param2 /param3:"Test-:-work" /param4=happy -param5 '--=nice=--'
-			foreach(var txt in args)
+
+            foreach(var txt in args)
             {
                 // Look for new parameters (-,/ or --) and a possible enclosed value (=,:)
                 var parts = splitter.Split(txt,3);
@@ -42,25 +52,27 @@ namespace iLogicCollector{
                 {
 					// Found a value (for the last parameter found (space separator))
 					case 1:
-						if(parameter!=null)
+                    {
+                        if(parameter!=null)
                         {
-							if(!Parameters.ContainsKey(parameter.ToLower()))
+                            if(!Parameters.ContainsKey(parameter))
                             {
-								parts[0]=remover.Replace(parts[0],"$1");
-								Parameters.Add(parameter.ToLower(), parts[0]);
+                                parts[0]=remover.Replace(parts[0],"$1");
+                                Parameters.Add(parameter, parts[0]);
                             }
-							parameter=null;
-						}
-						// else Error: no parameter waiting for a value (skipped)
-						break;
+                            parameter=null;
+                        }
+                        // else Error: no parameter waiting for a value (skipped)
+                        break;
+                    }
 
-					// Found just a parameter
+                    // Found just a parameter
 					case 2:
 						// The last parameter is still waiting. With no value, set it to true.
-						if(parameter!=null)
+						if(parameter!=null && !Parameters.ContainsKey(parameter))
                         {
-							if(!Parameters.ContainsKey(parameter.ToLower())) Parameters.Add(parameter.ToLower(), "true");
-						}
+                            Parameters.Add(parameter, "true");
+                        }
 						parameter=parts[1].ToLower();
 						break;
 
@@ -69,14 +81,14 @@ namespace iLogicCollector{
 						// The last parameter is still waiting. With no value, set it to true.
 						if(parameter!=null)
                         {
-							if(!Parameters.ContainsKey(parameter.ToLower())) Parameters.Add(parameter.ToLower(), "true");
+							if(!Parameters.ContainsKey(parameter)) Parameters.Add(parameter, "true");
 						}
 						parameter=parts[1].ToLower();
 						// Remove possible enclosing characters (",')
-						if(!Parameters.ContainsKey(parameter.ToLower()))
+						if(!Parameters.ContainsKey(parameter))
                         {
 							parts[2]=remover.Replace(parts[2], "$1");
-							Parameters.Add(parameter.ToLower(), parts[2]);
+							Parameters.Add(parameter, parts[2]);
 						}
 						parameter=null;
 						break;
