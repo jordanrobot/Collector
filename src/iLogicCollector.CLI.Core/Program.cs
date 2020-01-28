@@ -14,12 +14,17 @@ namespace iLogicCollector
 
             if (config.Debug == true)
             {
-                Console.Write("\n\n Tests:\n");
-                Console.WriteLine("Path = " + config.CollectPath);
+
+                Console.Write("\n-------------\n Debugging Dump:\n");
+                Console.WriteLine("Input =   " + config.Input);
                 Console.WriteLine("Output = " + config.Output);
-                Console.WriteLine("Force = " + config.Force);
+                Console.WriteLine("Force =  " + config.Force);
+                Console.WriteLine("CWD =    "+ config.CurrentWorkingPath);
+                Console.WriteLine("Debug =  "+ config.Debug);
+
             }
 
+            return;
         }
 
         }
