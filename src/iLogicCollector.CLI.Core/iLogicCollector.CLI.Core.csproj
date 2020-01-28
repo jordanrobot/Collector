@@ -6,7 +6,7 @@
     <AssemblyName>iLogicCollector</AssemblyName>
     <RootNamespace>iLogicCollector</RootNamespace>
     <StartupObject>iLogicCollector.Program</StartupObject>
-    <ApplicationIcon />
+    <ApplicationIcon>C:\Users\mjordan\_Sync\dev\ilogic-collector\Images\iLogicCollector.ico</ApplicationIcon>
     <Copyright>Matthew D. Jordan</Copyright>
     <Company />
     <Product />
