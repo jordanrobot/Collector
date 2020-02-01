@@ -24,14 +24,14 @@ namespace iLogicCollector{
 		// Variables
 		private  StringDictionary Parameters;
 
+
 		// Constructor
 		public ArgumentParser(string[] args)
         {
-            if (args[0] == null)
-            {
-                return;
-            }
-
+                if ((args != null && args.Length != 0))
+                {
+                    return;
+                }
 
             Parameters = new StringDictionary();
 			var splitter = new Regex (@"^-{1,2}|^/|=|:",RegexOptions.IgnoreCase|RegexOptions.Compiled);
@@ -100,9 +100,28 @@ namespace iLogicCollector{
             {
 				if(!Parameters.ContainsKey(parameter.ToLower())) Parameters.Add(parameter.ToLower(), "true");
             }
+
+			foreach (System.Collections.DictionaryEntry key in Parameters)
+            {
+                Console.WriteLine(key.Key);
+                Console.WriteLine(key.Value);
+            }
         } //ArgumentParser
 
-		// Retrieve a parameter value if it exists
+        public bool IsEmpty()
+        {
+            try
+            {
+                return (Parameters == null);
+            }
+            catch (System.NullReferenceException)
+            {
+                return false;
+            }
+
+        }
+
+		// Retrieve a parameter value (if it exists) through a lambda expression
 		public string this [string param] => (Parameters[param]);
     }
 }
