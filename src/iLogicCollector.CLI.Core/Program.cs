@@ -16,12 +16,12 @@ namespace iLogicCollector
             {
 
                 Console.Write("\n-------------\n Debugging Dump:\n");
-                Console.WriteLine("Input =   " + config.Input);
-                Console.WriteLine("Output = " + config.Output);
-                Console.WriteLine("Force =  " + config.Force);
-                Console.WriteLine("CWD =    "+ config.CurrentWorkingPath);
-                Console.WriteLine("Debug =  "+ config.Debug);
-
+                Console.WriteLine("Input =      " + config.Input);
+                Console.WriteLine("Output =     " + config.Output);
+                Console.WriteLine("Force =      " + config.Force);
+                Console.WriteLine("Debug =      "+ config.Debug);
+                Console.WriteLine("Recursion =  "+ config.Recursion);
+                Console.WriteLine("CWD =        "+ config.CurrentWorkingPath);
             }
 
             return;
