@@ -1,4 +1,4 @@
-# iLogic Collector
+# Collector
 
 
 ![Logo](Images/Collector128.png)
