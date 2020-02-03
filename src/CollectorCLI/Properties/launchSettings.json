@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "iLogicCollector.CLI.Core": {
+      "commandName": "Project",
+      "commandLineArgs": "-o \"test_file.iLogicVb\" -debug"
+    }
+  }
+}

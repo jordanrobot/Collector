@@ -1,4 +1,4 @@
-'</iLogicCollectorHeader>
+'</CollectorHeader>
 
 AddReference "Company.Library1.dll"
 AddReference "microsoft.office.interop.excel.dll"
@@ -10,7 +10,7 @@ Imports Company.Library1
 Imports System.Text.RegularExpressions
 
 
-Module Main '</iLogicCollectorHide>
+Module Main '<CollectorPrepend>'</CollectorPrepend>
 
     Public Sub Main()
 
@@ -32,4 +32,4 @@ Module Main '</iLogicCollectorHide>
         Torus
     End Enum
 
-End Module '</iLogicCollectorHide>
+End Module '<CollectorPrepend>'</CollectorPrepend>

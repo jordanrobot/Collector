@@ -1,4 +1,4 @@
-'</iLogicCollector>
+'</Collector>
 
 Public Class ExporterClass
 

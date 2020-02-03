@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <AssemblyName>Collector</AssemblyName>
+    <RootNamespace>Collector</RootNamespace>
+    <StartupObject>iLogicCollector.Program</StartupObject>
+    <ApplicationIcon>C:\Users\mjordan\_Sync\dev\ilogic-collector\Images\Collector.ico</ApplicationIcon>
+    <Copyright>Matthew D. Jordan</Copyright>
+    <Company />
+    <Product />
+    <PackageLicenseExpression>MIT License</PackageLicenseExpression>
+    <Description>A build tool that compiles multiple source code files into a single file.  Designed for use with Autodesk's Inventor iLogic scripts and Autocad LISP files.</Description>
+    <PackageProjectUrl>https://github.com/jordanrobot/Collector</PackageProjectUrl>
+    <PackageIcon>Collector.ico</PackageIcon>
+    <PackageIconUrl />
+    <RepositoryUrl>https://github.com/jordanrobot/Collector</RepositoryUrl>
+    <RepositoryType>Github</RepositoryType>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <FileVersion>1.0.0</FileVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\Images\Collector.ico">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>
