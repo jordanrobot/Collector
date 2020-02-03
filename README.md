@@ -4,8 +4,8 @@
 ![Logo](Images/Collector128.png)
 
 A powershell script that compiles multiple source code files into a single file.
-Designed for use with Autodesk's Inventor iLogic scripts and Autocad LISP files.
-It is intended to allow use of external IDEs such as Visual Studio and support
+Designed for use with Autodesk's Inventor iLogic scripts and Autocad LISP files,
+it is intended to allow use of external IDEs such as Visual Studio and support
 class or module-per-file coding organization.
 
 This is handy for autolisp routines as well, as they can be stored in seperate files
