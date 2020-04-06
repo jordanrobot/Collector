@@ -24,7 +24,6 @@ namespace iLogicCollector
         {
             // Command line parsing
             var parameters = new ArgumentParser(args);
-
             if (parameters.IsEmpty())
             {
                 
@@ -35,76 +34,9 @@ namespace iLogicCollector
 
             // Look for specific arguments values and display them if they exist (return null if they don't)
 
-            //Force
             try
             {
-                if ((!parameters.IsEmpty()) || (parameters["f"] != null) || (parameters["force"] != null))
-                {
-                    this.Force = true;
-                }
-            }
-            finally
-            {
-            }
-
-            //Debug
-            try
-            {
-                if ((!parameters.IsEmpty()) || (parameters["d"] != null) || (parameters["debug"] != null))
-                {
-                    this.Debug = true;
-                }
-            }
-            finally
-            {
-            }
-
-            //Recursion
-            try
-            {
-                if ((!parameters.IsEmpty()) || (parameters["r"] != null) || (parameters["recursion"] != null))
-                {
-                    this.Recursion = true;
-                }
-            }
-            finally
-            {
-            }
-
-
-            //Input
-            try
-            {
-                if ((!parameters.IsEmpty()) || (parameters["input"] != null) || (parameters["i"] != null))
-                {
-                    var tempInput = parameters["input"] ?? parameters["i"];
-                    //this.Input = CalculateInputPath(tempInput);
-                }
-                else
-                {
-                    this.Input = Environment.CurrentDirectory;
-                }
-            }
-            finally
-            {
-            }
-
-            //Output
-
-            try
-            {
-                if ((!parameters.IsEmpty()) || (parameters["output"] == null) && (parameters["o"] == null))
-                {
-                    //Todo: make the path/output recognize if the entered parameter is a whole path, or just a file name.
-                    var temp = Path.GetDirectoryName(Environment.CurrentDirectory);
-                    Output = temp + ".txt";
-                }
-                else
-                {
-                    var temp = parameters["output"] ?? parameters["o"];
-
-                    this.Output = CalculateOutputPath(temp);
-                }
+                GetForceOption(parameters);
             }
             finally
             {
@@ -112,19 +44,39 @@ namespace iLogicCollector
 
             try
             {
-                //Help;
-                if ((parameters["help"] != null) || (parameters["h"] != null) || (parameters["?"] != null))
-                {
-                    Console.WriteLine("iLogic Collector\n" +
-                                      "version: \n" + Version +
-                                      "\n" +
-                                      "Command options:\n" +
-                                      "-i, --input:     Directory whose content you want to process.\n" +
-                                      "-o, --output:    The output file to write.\n" +
-                                      "-r, --recursion: Recursively process input directory.\n" +
-                                      "-f, --force:     Overwrite the output file if it already exists.\n" +
-                                      "-h, --help:      Show this help menu.\n");
-                }
+                GetDebugOption(parameters);
+            }
+            finally
+            {
+            }
+
+            try
+            {
+                GetRecursionOption(parameters);
+            }
+            finally
+            {
+            }
+
+            try
+            {
+                GetInputOption(parameters);
+            }
+            finally
+            {
+            }
+
+            try
+            {
+                GetOutputOption(parameters);
+            }
+            finally
+            {
+            }
+
+            try
+            {
+                GetHelpOption(parameters);
             }
 
             //Todo: set the rest of these config options
@@ -133,6 +85,79 @@ namespace iLogicCollector
             }
         }
 
+        private void GetForceOption(ArgumentParser parameters)
+        {
+            if ((!parameters.IsEmpty()) || (parameters["f"] != null) || (parameters["force"] != null))
+            {
+                this.Force = true;
+            }
+        }
+
+        private void GetDebugOption(ArgumentParser parameters)
+        {
+            if ((!parameters.IsEmpty()) || (parameters["d"] != null) || (parameters["debug"] != null))
+            {
+                this.Debug = true;
+            }
+        }
+
+        private void GetRecursionOption(ArgumentParser parameters)
+        {
+            if ((!parameters.IsEmpty()) || (parameters["r"] != null) || (parameters["recursion"] != null))
+            {
+                this.Recursion = true;
+            }
+        }
+
+        private void GetInputOption(ArgumentParser parameters)
+        {
+            if ((!parameters.IsEmpty()) || (parameters["input"] != null) || (parameters["i"] != null))
+            {
+                var tempInput = parameters["input"] ?? parameters["i"];
+                //this.Input = CalculateInputPath(tempInput);
+            }
+            else
+            {
+                this.Input = Environment.CurrentDirectory;
+            }
+        }
+
+        private void GetOutputOption(ArgumentParser parameters)
+        {
+            if ((!parameters.IsEmpty()) || (parameters["output"] == null) && (parameters["o"] == null))
+            {
+                //Todo: make the path/output recognize if the entered parameter is a whole path, or just a file name.
+                var temp = Path.GetDirectoryName(Environment.CurrentDirectory);
+                Output = temp + ".txt";
+            }
+            else
+            {
+                var temp = parameters["output"] ?? parameters["o"];
+
+                this.Output = CalculateOutputPath(temp);
+            }
+        }
+
+        private static void GetHelpOption(ArgumentParser parameters)
+        {
+            if ((parameters["help"] != null) || (parameters["h"] != null) || (parameters["?"] != null))
+            {
+                ShowHelpScreen();
+            }
+        }
+
+        private static void ShowHelpScreen()
+        {
+            Console.WriteLine("iLogic Collector\n" +
+                              "version: \n" + Version +
+                              "\n" +
+                              "Command options:\n" +
+                              "-i, --input:     Directory whose content you want to process.\n" +
+                              "-o, --output:    The output file to write.\n" +
+                              "-r, --recursion: Recursively process input directory.\n" +
+                              "-f, --force:     Overwrite the output file if it already exists.\n" +
+                              "-h, --help:      Show this help menu.\n");
+        }
 
         public string CalculateInputPath(string input)
         {
