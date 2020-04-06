@@ -8,9 +8,9 @@ using System.Runtime.Remoting.Messaging;
 using System.Text.RegularExpressions;
 using System.Xml;
 
-namespace iLogicCollector
+namespace Collector
 {
-    public class Config
+    public class Configuration
     {
         public string Input { get; set; }
         public string Output { get; set; }
@@ -20,7 +20,7 @@ namespace iLogicCollector
         public static string Version { get; } = Assembly.GetEntryAssembly().GetName().Version.ToString();
         public string CurrentWorkingPath { get; } = Path.GetDirectoryName(Environment.CurrentDirectory);
 
-        public Config(string[] args)
+        public Configuration(string[] args)
         {
             // Command line parsing
             var parameters = new ArgumentParser(args);

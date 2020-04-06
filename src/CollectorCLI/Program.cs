@@ -4,13 +4,13 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace iLogicCollector
+namespace Collector
 {
     class Program
     {
         static void Main(string[] args)
         {
-            var config = new Config(args);
+            var config = new Configuration(args);
 
             if (config.Debug == true)
             {

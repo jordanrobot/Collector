@@ -16,7 +16,7 @@ using System.Diagnostics;
 using System.Runtime.Serialization.Formatters;
 using System.Text.RegularExpressions;
 
-namespace iLogicCollector{
+namespace Collector{
 	/// <summary>
 	/// ArgumentParser class
 	/// </summary>
