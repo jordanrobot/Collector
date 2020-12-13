@@ -1,95 +1,164 @@
+param (
+	[Parameter()]
+	[string] $Watch,
+	[string] $Out,
+	[string] $Filter
+	)
+
+[decimal]$version = 2.0
+
 ###   Collector   ###
-[decimal]$version = 1.05
+#####################
+
 # MIT License
 #
 # Matthew D. Jordan, (C) 2020
 # www.scenic-shop.com
 #
-# This script will collect multiple text files within a single directory and insert them into a single file.  This is most often used with Inventor iLogic routines, or Autocad Lisp routines.
+# This script will recursively collect multiple text files within a single directory and insert them into a single file.
+# The trick is that you can specify which files to collect with a special tag in the first line of that document. A few
+# different tag options will allow you to perform different operations at run time.
 #
-# To use, include tags into the source code files that you want to collect.
-#   '</Collector> : include this tag in the first line of each file you want to collect.
-#   '</CollectorHeader> : Include this tag in the first line of header and main files.  This will ensure the file is placed at the top of the collected file.
-#   '<CollectorPrepend>' or ;, whatever you want to insert at the front of the line.</CollectorPrepend> : include this line after any line of code to comment out that line at collection time.  Use this for module wrappers that help VS, but need to be removed for iLogic to work properly. The text between the tags will be used to prepend the current line.
+# This is most often used when developing complicated Inventor iLogic routines, or collecting Autocad Lisp routines into
+# a single file. Though this tool maybe used for just about any source code file.
 #
-# When ready to compile, run this powershell script to combine the files into a single file.  If running from the command line, you may need to issue the command:
-#   powershell -ExecutionPolicy ByPass -File .\Collector.ps1
+# Control Tags
+# ===
 #
-# The current directory name is used as the file name with an .iLogicVB extension.  This will overwrite a file with that name if it can access it.
+# To include a file in the collection insert the </Collector> tag in the first line of each file you want to collect.
+# You may comment this tag out for whatever source code you're using.  E.g. for VB, the tag would read '</Collector>,
+# for AutoLISP it would read ;</Collector>.
+#
+# It ensure a file is placed at the top of the collected file include the </CollectorHeader> tag in the first line of
+# a file.  This is useful for header statements and includes.
+#
+# To comment out text that is collected, you may insert comment characters by placing the character between the 
+# <CollectorPrepend> and </CollectorPrepend> tags.  E.g. for Inventor ilogic routines, use this to comment out module
+# declarations and include statments.  These module declarations make the code readable in Visual Studio, but need to 
+# be removed for iLogic to work properly.
+#
+#
+# Parameters
+# ===
+#
+# When ready to compile, run this powershell script to combine the files into a single file. There are several command
+# line parameters you may use:
+#
+#	-Watch : the directory to scan.  The path may be relative to the script location or absolute.
+#			 E.g. -Watch "src", or -Watch "C:\dev\project\" will only scan files within those directories.
+#
+#	-Out :   Specifies the output file name that collector will generate. The path may be relative to the script location
+#			 or absolute.
+#		     
+#
+#	-Filter : an optional wildcard glob that will speed up the collection process by restricting the scanned files to
+#			  matches.  E.g. -Filter "*.vb" will instruct collector to only scan files ending in .vb.
+#
+# User defaults for these parameters can be set within the file.
 
-    #Get directory name, compile file name
-    $extension = ".iLogicVb"
-    $directoryName = pwd | Select-Object | %{$_.ProviderPath.Split("\")[-1]}
-    $outputFile = ((pwd).path + "\" + $directoryName + $extension)
+	#Parameter Defaults
+#======================================
+	#sub-directory to watch...
+    $subdirectoryWatchDefault = "src"
+    #name of the file to build...
+	$outputFilePreset = "build\build.vb"
+	#File Search Filter
+	$FilterDefault = "*.vb"
+#======================================
 
+# Set up parameters if there are any...
+#======================================
+#Set Directory to Watch...
+if (-not $Watch) {
+	$directoryToWatch = (Join-Path $PSScriptRoot $subdirectoryWatchDefault)
 
-#Test if compileFile is writable! Exit if not!
-If (test-path -path $outputFile)
-    {
-    Try { [io.file]::OpenWrite($compileFile).close() 
-    }
-    Catch
-        { 
-        Write-Warning "Unable to write to output file."
-        exit
-        }
-    }
+} else {
 
-#get the files in the current directory (recursive)
-$fileList = Get-ChildItem -Path $pwd -File -Recurse -Name
-
-#test if the file is in the current directory, remove if not
-If (test-path $compileFile) {
-    Remove-Item -path $compileFile
+	if ([System.IO.Path]::IsPathRooted($Watch)) {
+		$directoryToWatch = $Watch
+	} else {
+		$directoryToWatch = (Join-Path $PSScriptRoot $Watch)
+	}
 }
+
+if (-not (test-path -Path $directoryToWatch)) {
+	Write-Host "The directory $directoryToWatch does not exist.  Exiting with extreme prejudice."
+	Write-Host ""
+	exit
+}
+
+
+#Set output filename...
+if (-not $Out) {
+	$outputFile = (Join-Path $PSScriptRoot $outputFilePreset)
+
+} else {
+
+	if ([System.IO.Path]::IsPathRooted($Out)) {
+		$outputFile = $Out
+	} else {
+		$outputFile = (Join-Path $PSScriptRoot $Out)
+	}
+}
+
+#Set filter...
+if (-not $Filter) {
+	$Filter = $FilterDefault
+}
+
+# Main routine...
+#======================================
+#get the files in the current directory (recursive)
+$fileList = Get-ChildItem -Path $directoryToWatch -File -Recurse -Filter $Filter -Name
 
 #Create our temporary holding array, add the header...
 [System.Collections.ArrayList]$dataArrayPrecollection = (("'This file has been auto-generated by Collector version " + $version), ("'Collection timestamp: " + (get-date -Uformat "%Y/%m/%d - %R")), "'2020 Matthew D. Jordan - https://github.com/jordanrobot","")
 
-
 $fileList | ForEach-Object -process{
-
-    If (test-path $_) {
+    $fullPath = (Join-Path $directoryToWatch $_)
     
-        If ((Get-Content $_ -TotalCount 1) | Select-String -Pattern "<\/CollectorHeader>" -quiet) {
-            #Write filename
-            $dataArrayPrecollection += ("'" + $_.Path)
-            #Write contents
-            $dataArrayPrecollection += (Get-Content $_)
-            #Write new line
-            $dataArrayPrecollection += ""
-        }
-    }
+	If (test-path -Path $fullPath) {
+
+		If ((Get-Content -Path $fullPath -TotalCount 1) | Select-String -Pattern "<\/CollectorHeader>" -quiet) {
+			#Write filename
+			$dataArrayPrecollection += ("'" + $_)
+			#Write contents
+			$dataArrayPrecollection += (Get-Content -Path $fullPath)
+			#Write new line
+			$dataArrayPrecollection += ""
+		}
+	}
 }
 
 $fileList | Sort-Object -Descending FullName | ForEach-Object -process{
-
-    If (test-path $_) {
+    $fullPath = (Join-Path $directoryToWatch $_)
     
-        If ((Get-Content $_ -TotalCount 1) | Select-String -Pattern "<\/Collector>" -quiet) {
-            $dataArrayPrecollection += (Get-Content $_)
-            $dataArrayPrecollection +=  ""
-        }
-    }
+	If (test-path -Path $fullPath) {
+	
+		If ((Get-Content -Path $fullPath -TotalCount 1) | Select-String -Pattern "<\/Collector>" -quiet) {
+			$dataArrayPrecollection += (Get-Content -Path $fullPath)
+			$dataArrayPrecollection +=  ""
+		}
+	}
 }
 
 #Create the list to hold processed data
-$dataArray = $list = New-Object Collections.Generic.List[String]
+$dataArray = New-Object Collections.Generic.List[String]
 
 #Go through the list and process each line...
 $dataArrayPrecollection | Foreach-object -Process {
 
-    If ($_ -match "<CollectorPrepend>(.*)<\/CollectorPrepend>") {
-        #Hide tag found, connect out line...
-        ($dataArray.Add($Matches.1 + $_))
-        
-    } Elseif ($_ -match "<\/Collector>") {
-        #IlogicCollector tag found, skip this line
-    }
-    Else {
-        #normal line, add to the file
-        ($dataArray.Add($_))
-    }
+	If ($_ -match "<CollectorPrepend>(.*)<\/CollectorPrepend>") {
+		#Hide tag found, connect out line...
+		($dataArray.Add($Matches.1 + $_))
+		
+	} Elseif ($_ -match "<\/Collector>") {
+		#IlogicCollector tag found, skip this line
+	}
+	Else {
+		#normal line, add to the file
+		($dataArray.Add($_))
+	}
 }
 
 #populate the collected file...
@@ -102,3 +171,6 @@ finally
 {
     $stream.close()
 }
+
+$size = Get-ChildItem $outputFile | % {[math]::ceiling($_.length / 1kb)}
+Write-Host "File $outputFile built at $size kb"
